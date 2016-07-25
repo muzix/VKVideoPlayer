@@ -426,9 +426,9 @@ typedef enum {
 
 - (void)playOnAVPlayer:(NSURL*)streamURL playerLayerView:(VKVideoPlayerLayerView*)playerLayerView track:(id<VKVideoPlayerTrackProtocol>)track {
 
-  if (!track.isVideoLoadedBefore) {
-    track.isVideoLoadedBefore = YES;
-  }
+//  if (!track.isVideoLoadedBefore) {
+//    track.isVideoLoadedBefore = YES;
+//  }
 
   AVURLAsset* asset = [[AVURLAsset alloc] initWithURL:streamURL options:@{ AVURLAssetPreferPreciseDurationAndTimingKey : @YES }];
   [asset loadValuesAsynchronouslyForKeys:@[kTracksKey, kPlayableKey] completionHandler:^{
@@ -470,7 +470,7 @@ typedef enum {
           if ([self.delegate respondsToSelector:@selector(videoPlayer:willStartVideo:)]) {
             [self.delegate videoPlayer:self willStartVideo:self.track];
           }
-          [self seekToLastWatchedDuration];
+           [self seekToLastWatchedDuration];
         }];
         break;
       }
@@ -563,7 +563,9 @@ typedef enum {
 #pragma mark -
 
 - (NSTimeInterval)currentTime {
-  if (!self.track.isVideoLoadedBefore) {
+  //if (!self.track.isVideoLoadedBefore) {
+  if (self.track.isVideoLoadedBefore) {
+      self.track.isVideoLoadedBefore = NO;
     return [self.track.lastDurationWatchedInSeconds doubleValue] > 0 ? [self.track.lastDurationWatchedInSeconds doubleValue] : 0.0f;
   } else return CMTimeGetSeconds([self.player currentCMTime]);
 }
@@ -754,7 +756,7 @@ typedef enum {
       case VKVideoPlayerStateContentPlaying:
         break;
       case VKVideoPlayerStateContentPaused:
-        self.view.bigPlayButton.hidden = YES;
+        self.view.bigPlayButton.hidden = NO;
         break;
       case VKVideoPlayerStateDismissed:
         break;
@@ -792,7 +794,7 @@ typedef enum {
         self.view.playerLayerView.hidden = NO;
         self.view.captionBottomView.hidden = NO;
         self.view.captionTopContainerView.hidden = NO;
-        self.track.lastDurationWatchedInSeconds = [NSNumber numberWithFloat:[self currentTime]];
+        // self.track.lastDurationWatchedInSeconds = [NSNumber numberWithFloat:[self currentTime]];
         self.view.bigPlayButton.hidden = NO;
         self.view.messageLabel.hidden = YES;
         self.view.externalDeviceView.hidden = ![self isPlayingOnExternalDevice];
@@ -1313,9 +1315,11 @@ typedef enum {
 
 - (void)seekToTimeInSeconds:(float)time completionHandler:(void (^)(BOOL finished))completionHandler {
   if ([self respondsToSelector:@selector(seekToTime:toleranceBefore:toleranceAfter:completionHandler:)]) {
-    [self seekToTime:CMTimeMakeWithSeconds(time, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:completionHandler];
+//    [self seekToTime:CMTimeMakeWithSeconds(time, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:completionHandler];
+      [self seekToTime:CMTimeMakeWithSeconds(time, 600) toleranceBefore:kCMTimePositiveInfinity toleranceAfter:kCMTimePositiveInfinity completionHandler:completionHandler];
   } else {
-    [self seekToTime:CMTimeMakeWithSeconds(time, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+//    [self seekToTime:CMTimeMakeWithSeconds(time, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+      [self seekToTime:CMTimeMakeWithSeconds(time, 600) toleranceBefore:kCMTimePositiveInfinity toleranceAfter:kCMTimePositiveInfinity];
     completionHandler(YES);
   }
 }

@@ -62,6 +62,7 @@
 @property (nonatomic, strong) IBOutlet UILabel* totalTimeLabel;
 @property (nonatomic, strong) IBOutlet UIButton* rewindButton;
 @property (nonatomic, strong) IBOutlet UIButton* fullscreenButton;
+@property (unsafe_unretained, nonatomic) IBOutlet UILabel *lblLive;
 
 @property (nonatomic, strong) IBOutlet UIButton* previousButton;
 @property (nonatomic, strong) IBOutlet UIButton* doneButton;

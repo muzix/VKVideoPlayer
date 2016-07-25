@@ -163,4 +163,9 @@ VKVideoPlayerViewDelegate
 
 - (void)updateCaptionView:(DTAttributedLabel*)captionView caption:(id<VKVideoPlayerCaptionProtocol>)caption playerView:(VKVideoPlayerView*)playerView;
 - (void)clearCaptionView:(DTAttributedLabel*)captionView;
+
+#pragma mark - CUSTOM
+- (void)handleErrorCode:(VKVideoPlayerErrorCode)errorCode track:(id<VKVideoPlayerTrackProtocol>)track;
+- (float)currentBitRateInKbps;
+
 @end
